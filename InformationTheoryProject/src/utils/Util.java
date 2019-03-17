@@ -6,15 +6,35 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.imageio.ImageIO;
+import java.util.Arrays;
 
-/*
- * converte un'immagine jpg in una stringa di bit
- */
-public class ConvertImage {
+import javax.imageio.ImageIO;
+//Classe con metodi statici di utilita'
+public class Util {
 	
+	//trasforma un stringa di testo in un array di bit
+	public static byte [] textToBinary(String msg) {
+		  byte[] bytes = msg.getBytes();
+		  byte[]bits;
+		  StringBuilder binary = new StringBuilder();
+		  for (byte b : bytes)
+		  {
+		     int val = b;
+		     for (int i = 0; i < 8; i++)
+		     {
+		        binary.append((val & 128) == 0 ? 0 : 1);
+		        val <<= 1;
+		     }
+		  }
+		  System.out.println(binary.toString());
+		  bits = new byte[binary.length()];
+		  for(int i=0; i< bits.length; i++)
+	        	bits[i]= (byte)Character.getNumericValue(binary.charAt(i));
+	        return bits;
+	}
 	
-	public static String toBinary(String filePath) {
+	//trasforma un'immagine jpg in un array di bit
+	public static byte[] ImagetoBinary(String filePath) {
 		BufferedImage img;
 		 ByteArrayOutputStream b = new ByteArrayOutputStream();
 		try {
@@ -42,10 +62,14 @@ public class ConvertImage {
             catch(IOException e1) {
               System.out.println("Error during reading/writing");
          }
-        return sb.toString();
+        byte [] bits= new byte[sb.length()];
+        for(int i=0; i< bits.length; i++)
+        	bits[i]= (byte)Character.getNumericValue(sb.charAt(i));
+        return bits;
 	}
-	
+
+	public static void main(String[] args) {
+		System.out.println(Arrays.toString(textToBinary("ciao")));
+	}
 
 }
-
-
