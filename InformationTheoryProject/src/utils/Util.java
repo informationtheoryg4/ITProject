@@ -69,7 +69,7 @@ public class Util {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(Arrays.toString(textToBinary("ciao")));
+		System.out.println(Arrays.toString(textToBinary("1000")));
 	}
 
 }
