@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -13,9 +15,8 @@ import javax.imageio.ImageIO;
 public class Util {
 	
 	//trasforma un stringa di testo in un array di bit
-	public static byte [] textToBinary(String msg) {
+	public static String textToBinary(String msg) {
 		  byte[] bytes = msg.getBytes();
-		  byte[]bits;
 		  StringBuilder binary = new StringBuilder();
 		  for (byte b : bytes)
 		  {
@@ -26,30 +27,23 @@ public class Util {
 		        val <<= 1;
 		     }
 		  }
-		  System.out.println(binary.toString());
-		  bits = new byte[binary.length()];
-		  for(int i=0; i< bits.length; i++)
-	        	bits[i]= (byte)Character.getNumericValue(binary.charAt(i));
-	        return bits;
+	        return binary.toString();
 	}
 	
 	//trasforma un'immagine jpg in un array di bit
-	public static byte[] ImagetoBinary(String filePath) {
-		BufferedImage img;
-		 ByteArrayOutputStream b = new ByteArrayOutputStream();
+	public static String imageToBinary(String filePath) {
+		
+        byte[] jpgByteArray = null;
 		try {
-			img = ImageIO.read(new File(filePath));
-			 ImageIO.write(img, "jpg", b);
+			jpgByteArray = Files.readAllBytes(Paths.get(filePath));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        // write image to byte array in-memory (jpg format)
-
-        byte[] jpgByteArray = b.toByteArray();
         StringBuilder sb = new StringBuilder();
         for (byte by : jpgByteArray) {
             sb.append(Integer.toBinaryString(by & 0xFF));
+          
         }
         try {
            
@@ -62,14 +56,12 @@ public class Util {
             catch(IOException e1) {
               System.out.println("Error during reading/writing");
          }
-        byte [] bits= new byte[sb.length()];
-        for(int i=0; i< bits.length; i++)
-        	bits[i]= (byte)Character.getNumericValue(sb.charAt(i));
-        return bits;
+      
+        return sb.toString();
 	}
 
 	public static void main(String[] args) {
-		System.out.println(Arrays.toString(textToBinary("1000")));
+		imageToBinary("luna.jpg");
 	}
 
 }
