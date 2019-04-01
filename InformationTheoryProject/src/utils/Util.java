@@ -94,22 +94,54 @@ public class Util {
 	      return bImage2;
 	}
 	
+	public static String byteArrayToBinary(byte[] byteArray) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b : byteArray){
+		     int val = b;
+		     for (int i = 0; i < 8; i++){
+		        sb.append((val & 128) == 0 ? 0 : 1);
+		        val <<= 1;
+		     }
+		}
+        return sb.toString();
+	}
+	
+	public static byte[] binaryToByteArray(String binary) {
+		byte [] byteArray = new byte[binary.length()/8];
+		for (int i = 0; i < byteArray.length; i++) {
+			byteArray[i] = 0;
+		}
+		int index;
+		for(int i = 0; i<binary.length(); i+=8) {
+			for (int j = 0; j < 8; j++) {
+				index = i+j;
+				if(binary.charAt(index)=='1')
+					byteArray[i/8]+=(byte)Math.pow(2, 7-j);				
+			}
+		}
+		return byteArray;
+	}
+	
 	/*
 	 * da implementare metodo per passare da file di testo ad array di byte
 	 */
 
 	public static void main(String[] args) {
-		byte [] bytes=imageToByteArray("luna.jpg");
-		System.out.println("Array di bytes creato:\n");
-		System.out.println(bytes[3]);
-		BufferedImage bi= byteArrayToImage(bytes);
-		try {
-			ImageIO.write(bi, "jpg", new File("output.jpg") );
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		byte [] bytes=imageToByteArray("luna.jpg");
+//		System.out.println("Array di bytes creato:\n");
+//		System.out.println(bytes[3]);
+//		BufferedImage bi= byteArrayToImage(bytes);
+//		try {
+//			ImageIO.write(bi, "jpg", new File("output.jpg") );
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		byte [] b = new byte[] {27, 4};
+		String binary = byteArrayToBinary(b);
+		byte[] ba = binaryToByteArray(binary);
+		System.out.println(binary);
+		System.out.println(ba[0]+" "+ba[1]);
 	}
 
 }
