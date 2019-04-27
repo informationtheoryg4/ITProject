@@ -1,97 +1,133 @@
 package hamming;
 import java.util.Arrays;
 
+import utils.Util;
+
 
 public class HammingCoder {
 	
-	public static byte[] encode(byte[] p, HammingType type) {
+	public static String encode(String p, HammingType type) {
 		StringBuilder sb = new StringBuilder();
 		
 		int i;
 		switch (type) {
 		case H_7_4:
-			for (i = 0; i < p.length; i+=4) {
-				sb.append(hamming_7_4_Code(Arrays.copyOfRange(p, i, i+4))); //DA CORREGGERE
+			for (i = 0; i+4 <= p.length(); i+=4) {
+				sb.append(hamming_7_4_Code(p.substring(i, i+4))); //corretto
 			}
-			sb.append(hamming_gen(Arrays.copyOfRange(p, i-4, p.length)));
+			if(p.length()%4!=0) sb.append(hamming_gen(p.substring(i-4)));
 			break;
 		case H_12_8:
-			for (i = 0; i < p.length; i+=8) {
-				sb.append(hamming_12_8_Code(Arrays.copyOfRange(p, i, i+8))); //DA CORREGGERE
+			for (i = 0; i+8 <= p.length(); i+=8) {
+				sb.append(hamming_12_8_Code(p.substring(i, i+8))); //corretto
 			}
-			sb.append(hamming_gen(Arrays.copyOfRange(p, i-4, p.length)));
+			if(p.length()%8!=0)  sb.append(hamming_gen(p.substring(i-8)));
 			break;
 		default:
 			return hamming_gen(p);
 		}
-		String res = sb.toString();
-		byte [] resByte = new byte [res.length()];
-		for (int j = 0; j < resByte.length; j++) {
-			resByte[j] = (byte)Character.getNumericValue(res.charAt(j));
-		}
-		System.out.println(Arrays.toString(resByte));
-		return resByte;
+		return sb.toString();
+		
 	}
 	
-	private static byte[] hamming_gen(byte[] p) {
+	private static String hamming_gen(String p) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static byte[] hamming_7_4_Code(byte[] p) {
-		
-		if(p.length!=4)
+	public static String hamming_7_4_Code(String p) {
+//		System.out.println(p);
+		if(p.length()!=4)
 			return null;
 		
-		byte[][] GT = {
-				{1,1,1,0,0,0,0},
-				{1,0,0,1,1,0,0},
-				{0,1,0,1,0,1,0},
-				{1,1,0,1,0,0,1}};
-						
-		byte [] res = new byte[7];
-		for (int j = 0; j < GT[0].length; j++) {
-			for (int i = 0; i < p.length; i++) {
-				res[j] = xor((byte)(GT[i][j]*p[i]),res[j]);
+		String[] GT = {
+				"1110000",
+				"1001100",
+				"0101010",
+				"1101001"};
+		String tmp = "0000000";
+		char [] res = tmp.toCharArray();
+		for (int j = 0; j < GT[0].length(); j++) {
+			for (int i = 0; i < p.length(); i++) {
+				res[j] = xor((Character.getNumericValue(GT[i].charAt(j))*Character.getNumericValue(p.charAt(i))),Character.getNumericValue(res[j]));
 			}
 		
 		}
-		return res;
+		return String.valueOf(res);
+		
+//		byte[][] GT = {
+//				{1,1,1,0,0,0,0},
+//				{1,0,0,1,1,0,0},
+//				{0,1,0,1,0,1,0},
+//				{1,1,0,1,0,0,1}};
+//						
+//		byte [] res = new byte[7];
+//		for (int j = 0; j < GT[0].length; j++) {
+//			for (int i = 0; i < p.length; i++) {
+//				res[j] = xor((byte)(GT[i][j]*p[i]),res[j]);
+//			}		
+//		}
+		
 		
 	}
 	
-	private static byte xor(byte b1, byte b2) {
-		return b1==b2? (byte)0 : (byte)1;
+	private static char xor(int b1, int b2) {
+		return b1==b2? '0' : '1';
 	}
 	
-	public static byte[] hamming_12_8_Code(byte []p) {
-		if(p.length!=8)
+	public static String hamming_12_8_Code(String p) {
+		
+		if(p.length()!=8)
 			return null;
 		
-		byte[][] GT = {
-					   {1,1,1,0,0,0,0,0,0,0,0,0},
-					   {1,0,0,1,1,0,0,0,0,0,0,0},
-					   {0,1,0,1,0,1,0,0,0,0,0,0},
-					   {1,1,0,1,0,0,1,0,0,0,0,0},
-					   {1,0,0,0,0,0,0,1,1,0,0,0},
-					   {0,1,0,0,0,0,0,1,0,0,1,0},
-					   {1,1,0,0,0,0,0,1,0,0,1,0},
-					   {0,0,0,1,0,0,0,1,0,0,0,1}
-						 };
-						
-		byte [] res = new byte[12];
-		for (int j = 0; j < GT[0].length; j++) {
-			for (int i = 0; i < p.length; i++) {
-				res[j] = xor((byte)(GT[i][j]*p[i]),res[j]);
+		String[] GT = {
+				"111000000000",
+				"100110000000",
+				"010101000000",
+				"110100100000",
+				"100000011000",
+				"010000010010",
+				"110000010010",
+				"000100010001"
+				};
+		String tmp = "000000000000";
+		char [] res = tmp.toCharArray();
+		for (int j = 0; j < GT[0].length(); j++) {
+			for (int i = 0; i < p.length(); i++) {
+				res[j] = xor((Character.getNumericValue(GT[i].charAt(j))*Character.getNumericValue(p.charAt(i))),Character.getNumericValue(res[j]));
 			}
 		
 		}
-		return res;
+		return String.valueOf(res);
+		
+//		if(p.length!=8)
+//			return null;
+//		
+//		byte[][] GT = {
+//					   {1,1,1,0,0,0,0,0,0,0,0,0},
+//					   {1,0,0,1,1,0,0,0,0,0,0,0},
+//					   {0,1,0,1,0,1,0,0,0,0,0,0},
+//					   {1,1,0,1,0,0,1,0,0,0,0,0},
+//					   {1,0,0,0,0,0,0,1,1,0,0,0},
+//					   {0,1,0,0,0,0,0,1,0,0,1,0},
+//					   {1,1,0,0,0,0,0,1,0,0,1,0},
+//					   {0,0,0,1,0,0,0,1,0,0,0,1}
+//						 };
+//						
+//		byte [] res = new byte[12];
+//		for (int j = 0; j < GT[0].length; j++) {
+//			for (int i = 0; i < p.length; i++) {
+//				res[j] = xor((byte)(GT[i][j]*p[i]),res[j]);
+//			}
+//		
+//		}
+//		return res;
 	}
 	
 	public static void main(String[]args) {
-		byte [] r= encode(new byte[]{0,1,0,0,1,1,0,0},HammingType.H_7_4);
-		
+		System.out.println(encode("100111001", HammingType.H_7_4));
+		System.out.println(hamming_7_4_Code("1001"));
+		System.out.println(hamming_7_4_Code("1100"));
 	}
 	
 }

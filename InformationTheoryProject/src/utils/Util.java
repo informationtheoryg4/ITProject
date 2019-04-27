@@ -20,17 +20,14 @@ public class Util {
 	//trasforma un stringa di testo in un array di bit
 	public static String textToBinary(String msg) {
 		  byte[] bytes = msg.getBytes();
-		  StringBuilder binary = new StringBuilder();
-		  for (byte b : bytes)
-		  {
-		     int val = b;
-		     for (int i = 0; i < 8; i++)
-		     {
-		        binary.append((val & 128) == 0 ? 0 : 1);
-		        val <<= 1;
-		     }
-		  }
-	        return binary.toString();
+		  return byteArrayToBinary(bytes);
+	}
+	
+	public static String binaryToText(String binary) {
+		String msg;
+		byte [] bytes = binaryToByteArray(binary);
+		msg = new String(bytes);
+		return msg;
 	}
 	
 	//trasforma un'immagine jpg in un array di bit
@@ -94,6 +91,24 @@ public class Util {
 	      return bImage2;
 	}
 	
+	public static void byteArrayToImageFile(byte []input, String outPath) {
+		 ByteArrayInputStream bis = new ByteArrayInputStream(input);
+	      BufferedImage bImage2=null;
+		try {
+			bImage2 = ImageIO.read(bis);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			ImageIO.write(bImage2, "jpg", new File(outPath) );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static String byteArrayToBinary(byte[] byteArray) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b : byteArray){
@@ -127,21 +142,21 @@ public class Util {
 	 */
 
 	public static void main(String[] args) {
-//		byte [] bytes=imageToByteArray("luna.jpg");
-//		System.out.println("Array di bytes creato:\n");
-//		System.out.println(bytes[3]);
-//		BufferedImage bi= byteArrayToImage(bytes);
-//		try {
-//			ImageIO.write(bi, "jpg", new File("output.jpg") );
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		byte [] b = new byte[] {27, 4};
-		String binary = byteArrayToBinary(b);
-		byte[] ba = binaryToByteArray(binary);
-		System.out.println(binary);
-		System.out.println(ba[0]+" "+ba[1]);
+		byte [] bytes=imageToByteArray("luna.jpg");
+		System.out.println("Array di bytes creato:\n");
+		System.out.println(bytes[3]);
+		BufferedImage bi= byteArrayToImage(bytes);
+		try {
+			ImageIO.write(bi, "jpg", new File("output.jpg") );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		byte [] b = new byte[] {27, 4};
+//		String binary = byteArrayToBinary(b);
+//		byte[] ba = binaryToByteArray(binary);
+//		System.out.println(binary);
+//		System.out.println(ba[0]+" "+ba[1]);
 	}
 
 }
