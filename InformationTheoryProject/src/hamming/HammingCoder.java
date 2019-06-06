@@ -12,18 +12,21 @@ public class HammingCoder {
 		int i;
 		switch (type) {
 		case H_7_4:
+			sb.append("0");
 			for (i = 0; i+4 <= p.length(); i+=4) {
 				sb.append(hamming_7_4_Code(p.substring(i, i+4))); //corretto
 			}
 			if(p.length()%4!=0) sb.append(hamming_gen(p.substring(i-4)));
 			break;
 		case H_12_8:
+			sb.append("1");
 			for (i = 0; i+8 <= p.length(); i+=8) {
 				sb.append(hamming_12_8_Code(p.substring(i, i+8))); //corretto
 			}
 			if(p.length()%8!=0)  sb.append(hamming_gen(p.substring(i-8)));
 			break;
 		default:
+			sb.append("x");
 			return hamming_gen(p);
 		}
 		return sb.toString();
@@ -113,6 +116,8 @@ public class HammingCoder {
 //					   {1,1,0,0,0,0,0,1,0,0,1,0},
 //					   {0,0,0,1,0,0,0,1,0,0,0,1}
 //						 };
+		
+		
 //						
 //		byte [] res = new byte[12];
 //		for (int j = 0; j < GT[0].length; j++) {
@@ -125,9 +130,9 @@ public class HammingCoder {
 	}
 	
 	public static void main(String[]args) {
-		System.out.println(encode("100111001", HammingType.H_7_4));
-		System.out.println(hamming_7_4_Code("1001"));
-		System.out.println(hamming_7_4_Code("1100"));
+		System.out.println(encode("1001", HammingType.H_7_4));
+//		System.out.println(hamming_7_4_Code("0010"));
+//		System.out.println(hamming_7_4_Code("0101"));
 	}
 	
 }
