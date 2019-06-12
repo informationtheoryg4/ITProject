@@ -2,22 +2,31 @@ package swing;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JRadioButton;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
 
@@ -27,11 +36,18 @@ public class Pier extends JPanel implements ActionListener{
 	 * Create the panel.
 	 */
 	
+	private CodingType codingType;
+	private ChannelType channelType;
 	JRadioButton umts;
 	JRadioButton satellitar;
 	boolean selected;
+	File selectedFile;
+	JComboBox comboBox_1;
+	JButton btnStartSimulation;
 	
 	public Pier() {
+		channelType = ChannelType.UMTS;
+		codingType = CodingType.HUFFMANN;
 		setForeground(SystemColor.desktop);
 		setBackground(SystemColor.menu);
 		
@@ -39,11 +55,13 @@ public class Pier extends JPanel implements ActionListener{
 		
 		umts = new JRadioButton("UMTS");
 		umts.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		umts.setSelected(true);
 		umts.addActionListener(this);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1 = new JComboBox();
 		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Huffmann", "LZ77","Hamming"}));
+		comboBox_1.addActionListener(this);
 		
 		JLabel lblNewLabel = new JLabel("Coding method:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -57,34 +75,37 @@ public class Pier extends JPanel implements ActionListener{
 		
 		JSeparator separator = new JSeparator();
 		
-		JButton btnStartSimulation = new JButton("START SIMULATION");
-		btnStartSimulation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnStartSimulation = new JButton("START SIMULATION");
+		btnStartSimulation.addActionListener(this);
 		btnStartSimulation.setFont(new Font("Tahoma", Font.BOLD, 13));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(separator, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 530, Short.MAX_VALUE)
+				.addComponent(separator, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 541, Short.MAX_VALUE)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblChannel))
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(14)
-							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(54)
+							.addComponent(lblChannel)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(umts, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(satellitar)))))
-					.addContainerGap(169, Short.MAX_VALUE))
+							.addComponent(umts, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(satellitar))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(26)
+							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(198, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(191, Short.MAX_VALUE)
+					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE)
+					.addGap(180))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -95,17 +116,30 @@ public class Pier extends JPanel implements ActionListener{
 						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(28)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 13, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(54)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblChannel)
 						.addComponent(umts, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(satellitar))
-					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addGap(117)
 					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-					.addGap(62))
+					.addGap(30))
 		);
 		setLayout(groupLayout);
 
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g); // paint the background image and scale it to fill the entire space
+	    Image img= null;
+	    try {
+            img = ImageIO.read(new File("C:\\Users\\Giova\\Desktop\\background-polos-png-5.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+	    g.drawImage(img,5,10,null);
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
@@ -117,6 +151,42 @@ public class Pier extends JPanel implements ActionListener{
 			satellitar.setSelected(false);
 			umts.setSelected(true);
 		}
-		//System.out.println(selected);
+		else if(arg0.getSource()==comboBox_1) {
+			String selected= String.valueOf(comboBox_1.getSelectedItem());
+			switch(selected) {
+			case "Hamming":
+				codingType = CodingType.HAMMING;
+				System.out.println("Hamming");
+				break;
+			case "Huffmann":
+				codingType = CodingType.HUFFMANN;
+				System.out.println("Huffmann");
+				break;
+			case "LZ77":
+				codingType = CodingType.LZ;
+				System.out.println("LZ77");
+				break;
+			default:
+				System.out.println("ORANGO");
+				break;
+			}
+		
+		}
+		else if(arg0.getSource()== btnStartSimulation) {
+			System.out.println("Da implementare");
+		}
+		
+	}
+	
+	public void setSelectedFile(File f) {
+		selectedFile= new File(f.getPath());
+	}
+	
+	public CodingType getCodingType() {
+		return codingType;
+	}
+	
+	public ChannelType getChannelType() {
+		return channelType;
 	}
 }

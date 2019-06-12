@@ -2,18 +2,18 @@ package utils;
 
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.ImageView;
 //Classe con metodi statici di utilita'
 public class Util {
 	
@@ -135,6 +135,21 @@ public class Util {
 			}
 		}
 		return byteArray;
+	}
+	
+	public static String textFileToString(File f) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			String text;
+			while((text = br.readLine())!=null) {
+				sb.append(text+"\n");
+			}
+			br.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 	
 	/*
