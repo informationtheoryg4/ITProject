@@ -48,7 +48,7 @@ public class FinestraConMenu extends JFrame implements ActionListener{
             + "Cosimo Loiero, matricola\n"
             +"Giovanni Aloia, 195325\n"
             + "\nProfessor:\nIng. De Rango Floriano\n";
-	private JMenuItem esci,file,image,text,about;
+	private JMenuItem esci,send,image,text,about;
 	private JPanel panel1,panel2,panel3;
 	private JTextArea area2;
 	private JTextPane tp1,tp3;
@@ -67,15 +67,15 @@ public class FinestraConMenu extends JFrame implements ActionListener{
 		//creazione barra menù
 		JMenuBar menuBar= new JMenuBar();
 		//creazione file menu
-		JMenu fileMenu= new JMenu("Send");
+		JMenu fileMenu= new JMenu("File");
 		fileMenu.addSeparator();
-		file= new JMenuItem("File");
-		file.addActionListener(this);
+		send= new JMenuItem("Send");
+		send.addActionListener(this);
 		image= new JMenuItem("Image");
 		text= new JMenuItem("Message");
 		text.addActionListener(this);
 		image.addActionListener(this);
-		fileMenu.add(file);
+		fileMenu.add(send);
 		fileMenu.add(image);
 		fileMenu.add(text);
 		esci= new JMenuItem("Esci");
@@ -176,7 +176,7 @@ public class FinestraConMenu extends JFrame implements ActionListener{
 			}
 			
 		}
-		else if(arg0.getSource()==file) {
+		else if(arg0.getSource()==send) {
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt", "text");
 			chooser= new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			chooser.setFileFilter(filter);

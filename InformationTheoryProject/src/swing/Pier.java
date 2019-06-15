@@ -14,6 +14,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import connection.Server;
+
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
@@ -29,6 +32,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 
 public class Pier extends JPanel implements ActionListener{
 	
@@ -44,6 +48,7 @@ public class Pier extends JPanel implements ActionListener{
 	File selectedFile;
 	JComboBox comboBox_1;
 	JButton btnStartSimulation;
+	Server serverSocket;
 	
 	public Pier() {
 		channelType = ChannelType.UMTS;
@@ -78,10 +83,19 @@ public class Pier extends JPanel implements ActionListener{
 		btnStartSimulation = new JButton("START SIMULATION");
 		btnStartSimulation.addActionListener(this);
 		btnStartSimulation.setFont(new Font("Tahoma", Font.BOLD, 13));
+		
+		JTextArea textArea = new JTextArea();
+		try {
+			serverSocket = new Server();
+			textArea.setText(serverSocket.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(separator, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 541, Short.MAX_VALUE)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addComponent(separator, GroupLayout.PREFERRED_SIZE, 541, Short.MAX_VALUE)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -102,10 +116,14 @@ public class Pier extends JPanel implements ActionListener{
 							.addGap(26)
 							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(198, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(191, Short.MAX_VALUE)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGap(143)
 					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE)
-					.addGap(180))
+					.addContainerGap(228, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGap(34)
+					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 399, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(108, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -121,9 +139,11 @@ public class Pier extends JPanel implements ActionListener{
 						.addComponent(lblChannel)
 						.addComponent(umts, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(satellitar))
-					.addGap(117)
+					.addGap(18)
 					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-					.addGap(30))
+					.addGap(18)
+					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+					.addGap(29))
 		);
 		setLayout(groupLayout);
 
