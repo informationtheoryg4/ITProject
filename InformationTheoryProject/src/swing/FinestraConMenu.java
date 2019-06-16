@@ -74,11 +74,12 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private int port;
 	private HammingCoder hc;
 	Server serverSocket;
+	private JButton btnNewButton;
 
 	public FinestraConMenu() {
 		setTitle("Coder Simulator");
 		setLocation(150, 20);
-		setSize(1100, 678);
+		setSize(1100, 630);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		// creazione barra menù
@@ -132,6 +133,10 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 		spa.setAutoscrolls(true);
 		panel1.add(spa, "2, 2, left, top");
 		spa.setVisible(true);
+		
+		btnNewButton = new JButton("START");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		panel1.add(btnNewButton);
 		panel1.setPreferredSize(new Dimension(570, 400));
 		
 		space.add(panel1, BorderLayout.WEST);

@@ -47,7 +47,6 @@ public class Pier extends JPanel implements ActionListener{
 	boolean selected;
 	File selectedFile;
 	JComboBox comboBox_1;
-	JButton btnStartSimulation;
 	JTextArea textArea = new JTextArea();
 	
 	
@@ -81,10 +80,6 @@ public class Pier extends JPanel implements ActionListener{
 		
 		JSeparator separator = new JSeparator();
 		
-		btnStartSimulation = new JButton("START SIMULATION");
-		btnStartSimulation.addActionListener(this);
-		btnStartSimulation.setFont(new Font("Tahoma", Font.BOLD, 13));
-		
 		
 		/*try {
 			serverSocket = new Server();
@@ -95,7 +90,7 @@ public class Pier extends JPanel implements ActionListener{
 		}*/
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addComponent(separator, GroupLayout.PREFERRED_SIZE, 541, Short.MAX_VALUE)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -117,11 +112,7 @@ public class Pier extends JPanel implements ActionListener{
 							.addGap(26)
 							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(198, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(143)
-					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(228, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(34)
 					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 399, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(108, Short.MAX_VALUE))
@@ -140,9 +131,7 @@ public class Pier extends JPanel implements ActionListener{
 						.addComponent(lblChannel)
 						.addComponent(umts, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(satellitar))
-					.addGap(18)
-					.addComponent(btnStartSimulation, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addGap(87)
 					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
 					.addGap(29))
 		);
@@ -201,9 +190,7 @@ public class Pier extends JPanel implements ActionListener{
 			}
 		
 		}
-		else if(arg0.getSource()== btnStartSimulation) {
-			System.out.println("Da implementare");
-		}
+		
 		
 	}
 	
