@@ -46,4 +46,10 @@ public class Client {
 		}
 		return message;
 	}
+	public BufferedReader getInputStream() {
+		return in;
+	}
+	public PrintStream getOutputString() {
+		return out;
+	}
 }

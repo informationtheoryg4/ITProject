@@ -8,17 +8,18 @@ public class Server extends Thread{
 	
 	ServerSocket Server;
 	StringBuilder output;
+	public Socket client;
 	
 	public static void main(String argv[]) throws Exception{
 	
-		new Server();
+//		new Server();
 	}
 	
-	public Server() throws Exception{
+	public Server(int port) throws Exception{
 		
 		output= new StringBuilder();
-		Server = new ServerSocket(4000);
-		output.append("Il Server è in attesa sulla porta 4000 con indirizzo IP "+getIpAddress()+"\n");
+		Server = new ServerSocket(port);
+		output.append("Il Server è in attesa sulla porta "+port+" con indirizzo IP "+getIpAddress()+"\n");
 		this.start();
 	}
 	
@@ -29,12 +30,12 @@ public class Server extends Thread{
 			try {
 				output.append("In attesa di Connessione. \n");
 				System.out.println("In attesa di Connessione.");
-				Socket client = Server.accept();
+				client = Server.accept();
 				System.out.println("Connessione accettata da: "+
 						client.getInetAddress());
 				output.append("Connessione accettata da: "+
 						client.getInetAddress()+"\n");
-				Connect c = new Connect(client);
+//				Connect c = new Connect(client);
 			}
 			catch(Exception e) {}
 		}
@@ -86,22 +87,22 @@ public class Server extends Thread{
  
 	class Connect extends Thread{
 		
-		private Socket client = null;
+		private Client client = null;
 		BufferedReader in = null;
 		PrintStream out = null;
 		public Connect() {}
 		public Connect(Socket clientSocket){
 			
-			client = clientSocket;
+			client.socket = clientSocket;
 			try
 			{
 				in = new BufferedReader(
-						new InputStreamReader(client.getInputStream()));
-				out = new PrintStream(client.getOutputStream(), true);
+						new InputStreamReader(client.socket.getInputStream()));
+				out = new PrintStream(client.socket.getOutputStream(), true);
 			}
 			catch(Exception e1)
 			{
-				try { client.close(); }
+				try { client.socket.close(); }
 				catch(Exception e) { System.out.println(e.getMessage());}
 				return;
 			}
@@ -115,10 +116,16 @@ public class Server extends Thread{
 				// chiude gli stream e le connessioni
 				out.close();
 				in.close();
-				client.close();
+				client.socket.close();
 				
 			}
 			catch(Exception e) {}
 		}
+//		public BufferedReader getIn() {
+//			return in;
+//		}
+//		public PrintStream getOut() {
+//			return out;
+//		}
 		
 }

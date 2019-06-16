@@ -48,7 +48,8 @@ public class Pier extends JPanel implements ActionListener{
 	File selectedFile;
 	JComboBox comboBox_1;
 	JButton btnStartSimulation;
-	Server serverSocket;
+	JTextArea textArea = new JTextArea();
+	
 	
 	public Pier() {
 		channelType = ChannelType.UMTS;
@@ -65,7 +66,7 @@ public class Pier extends JPanel implements ActionListener{
 		
 		comboBox_1 = new JComboBox();
 		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Huffmann", "LZ77","Hamming"}));
+		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Huffmann", "LZ77", "Hamming_7_4", "Hamming_12_8"}));
 		comboBox_1.addActionListener(this);
 		
 		JLabel lblNewLabel = new JLabel("Coding method:");
@@ -84,14 +85,14 @@ public class Pier extends JPanel implements ActionListener{
 		btnStartSimulation.addActionListener(this);
 		btnStartSimulation.setFont(new Font("Tahoma", Font.BOLD, 13));
 		
-		JTextArea textArea = new JTextArea();
-		try {
+		
+		/*try {
 			serverSocket = new Server();
 			textArea.setText(serverSocket.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -149,12 +150,16 @@ public class Pier extends JPanel implements ActionListener{
 
 	}
 	
+	public void setTextArea(String s) {
+		textArea.setText(s);
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 	    super.paintComponent(g); // paint the background image and scale it to fill the entire space
 	    Image img= null;
 	    try {
-            img = ImageIO.read(new File("C:\\Users\\Giova\\Desktop\\background-polos-png-5.png"));
+            img = ImageIO.read(new File("background-polos-png-5.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -174,8 +179,12 @@ public class Pier extends JPanel implements ActionListener{
 		else if(arg0.getSource()==comboBox_1) {
 			String selected= String.valueOf(comboBox_1.getSelectedItem());
 			switch(selected) {
-			case "Hamming":
-				codingType = CodingType.HAMMING;
+			case "Hamming_7_4":
+				codingType = CodingType.HAMMING_7_4;
+				System.out.println("Hamming");
+				break;
+			case "Hamming_12_8":
+				codingType = CodingType.HAMMING_12_8;
 				System.out.println("Hamming");
 				break;
 			case "Huffmann":

@@ -39,11 +39,20 @@ public void actionPerformed(ActionEvent evt) {
 		try {
 		ip= ipaddr.getText();
 		p=Integer.parseInt(port.getText());
+		this.dispose();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(this, "Dati non validi!");
 		}
-		System.out.println("Indirizzo:"+ip+" Porta:"+p);
+		
 	}
+}
+
+public String getIP() {
+	return ip;
+}
+
+public int getPort() {
+	return p;
 }
 
 
