@@ -6,16 +6,18 @@ import java.util.*;
 
 public class Client {
 
-	BufferedReader in;
-	PrintStream out;
-	Socket socket;
+		BufferedReader in;
+		PrintStream out;
+public 	Socket socket;
 
 	public Client(String ipAddress, int port) {
 
 		String message;
 
 		try {
-			socket = new Socket(ipAddress, port);
+			System.out.println("yahuclient");
+			socket = new Socket("localhost", port);
+			System.out.println("yahuclient1");
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -28,6 +30,7 @@ public class Client {
 			out.println(message);
 			out.flush();
 			out.close();
+			socket.close();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -40,6 +43,7 @@ public class Client {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			message = in.readLine();
 			in.close();
+			socket.close();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -49,7 +53,7 @@ public class Client {
 	public BufferedReader getInputStream() {
 		return in;
 	}
-	public PrintStream getOutputString() {
+	public PrintStream getOutputStream() {
 		return out;
 	}
 }
