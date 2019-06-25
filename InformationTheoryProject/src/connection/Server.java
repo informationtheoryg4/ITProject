@@ -1,47 +1,50 @@
 package connection;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
 
-public class Server extends Thread {
+import javax.swing.JTextPane;
 
-	ServerSocket Server;
-	StringBuilder output;
-	public Socket client;
-	public String received;
+import utils.Util;
 
-	public static void main(String argv[]) throws Exception {
+public class Server extends Thread{
+	
+	private ServerSocket server;
+	private String msg;
+	private JTextPane tp1;
 
-//		new Server();
+	public Server(int port, JTextPane tp1) {
+		try {
+			this.tp1 = tp1;
+			server = new ServerSocket(port);
+			this.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
-	public Server(int port) throws Exception {
-
-		output = new StringBuilder();
-		Server = new ServerSocket(port);
-		output.append("Il Server è in attesa sulla porta " + port + " con indirizzo IP " + getIpAddress() + "\n");
-		this.start();
-	}
-
+	
 	public void run() {
-
-//		while (true) {
-			try {
-				output.append("In attesa di Connessione. \n");
-				System.out.println("In attesa di Connessione.");
-				client = Server.accept();
-				System.out.println("Connessione accettata da: " + client.getInetAddress());
-				output.append("Connessione accettata da: " + client.getInetAddress() + "\n");
-				Connect c = new Connect(client);
-				this.received = c.received;
-			} catch (Exception e) {
-			}
-//		}
-
+		try {
+			Socket client = server.accept();
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(client.getInputStream()));
+			msg = in.readLine();
+//			System.out.println(msg);
+			
+			//qui aggiornare GUI
+			tp1.setText(msg);
+			
+			in.close();
+			this.server.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
-
-	public static String getIpAddress() {
+	
+	public String getIpAddress() {
 		URL myIP;
 		try {
 			myIP = new URL("http://api.externalip.net/ip/");
@@ -69,63 +72,9 @@ public class Server extends Thread {
 		return null;
 	}
 
-	public String toString() {
-		return output.toString();
+	
+	public static void main(String[]args) {
+//		ProvaServer s = new ProvaServer(5001);
+		
 	}
-}
-
-class Connect extends Thread {
-
-	private Socket client1 = null;
-	BufferedReader in = null;
-	PrintStream out = null;
-	String received;
-
-	public Connect() {
-	}
-
-	public Connect(Socket clientSocket) {
-
-		client1 = clientSocket;
-		try {
-			in = new BufferedReader(new InputStreamReader(client1.getInputStream()));
-			out = new PrintStream(client1.getOutputStream(), true);
-		} catch (Exception e1) {
-			try {
-				client1.close();
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			return;
-		}
-		this.start();
-	}
-
-	public void run() {
-		try {
-			StringBuilder sb = new StringBuilder();
-			String tmp = "";
-			while (tmp != null) {
-				tmp = in.readLine();
-				System.out.println("skibidi");
-				sb.append(tmp);
-			}
-			received = sb.toString();
-			out.println("Messaggio ricevuto.");
-			out.flush();
-			// chiude gli stream e le connessioni
-			out.close();
-			in.close();
-			client1.close();
-
-		} catch (Exception e) {
-		}
-	}
-//		public BufferedReader getIn() {
-//			return in;
-//		}
-//		public PrintStream getOut() {
-//			return out;
-//		}
-
 }

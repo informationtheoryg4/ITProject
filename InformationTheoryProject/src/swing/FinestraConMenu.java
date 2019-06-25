@@ -12,8 +12,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -29,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,7 +58,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private JMenuItem esci, imageS, textS, imageR, textR, about;
 	private JPanel panel1, panel2, panel3;
 	private JTextArea area2;
-	private JTextPane tp1;
+	public JTextPane tp1;
 	private JFileChooser chooser;
 	private JButton start;
 	private File selectedFile;
@@ -61,11 +66,11 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private Pier panel4;
 	private ServerInformationWindow siw;
 	private String ipAddr;
-	private int port;
 	private HammingCoder hc;
 	Server serverSocket;
 	private JButton btnNewButton;
-	private Client client;
+	private Socket client;
+	private int port;
 //	private ServerSocket server;
 //	private Socket client;
 
@@ -206,6 +211,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 			}
 
 		} else if (arg0.getSource() == textS) {
+			setTitle("Coder Simulator - CLIENT");
 			tp1.setText("");
 			tp1.setEditable(true);
 			btnNewButton.setEnabled(true);
@@ -213,94 +219,37 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 			siw.setVisible(true);
 			siw.addWindowListener(new WindowAdapter() {
 
-				@Override
-				public void windowClosed(WindowEvent e) {
-					ipAddr = siw.getIP();
-					port = siw.getPort();
-					System.out.println("Indirizzo:" + ipAddr + " Porta:" + port);
-				}
+	public void windowClosed(WindowEvent e) {
+		ipAddr = siw.getIP();
+		port = siw.getPort();
 
-			});
+	}
 
-		}
-		/*
-		 * else if(arg0.getSource()==send) { FileNameExtensionFilter filter = new
-		 * FileNameExtensionFilter("Text Files", "txt", "text"); chooser= new
-		 * JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		 * chooser.setFileFilter(filter); int returnValue =
-		 * chooser.showOpenDialog(null); if (returnValue == JFileChooser.APPROVE_OPTION)
-		 * { selectedFile= chooser.getSelectedFile();
-		 * panel4.setSelectedFile(selectedFile); String output =
-		 * Util.textFileToString(selectedFile); tp1.setText(output); } }
-		 */
+	});
 
-		else if (arg0.getSource() == textR) {
-			int port = 8000;
-			tp1.setEditable(false);
-			boolean choosed = false;
+	}else if(arg0.getSource()==textR){
+		setTitle("Coder Simulator - SERVER");
+		int port = 4000;
+		   tp1.setEditable(false);
+		   boolean choosed = false;
+		   while (!choosed) {
+		    try {
+		     Server ps = new Server(port, tp1);
+		     panel4.setTextArea("In attesa all'indirizzo "+ps.getIpAddress()+" sulla porta "+port);
+		     choosed = true;
+		    } catch (Exception e) {
+		     // TODO Auto-generated catch block
 
-			try {
-				serverSocket = new Server(port);
-				panel4.setTextArea(
-						"Il server è in attesa sulla porta " + port + " con indirizzo IP " + Server.getIpAddress());
-				System.out.println("YAAAAHU");
-				System.out.println(
-						"Il server è in attesa sulla porta " + port + " con indirizzo IP " + Server.getIpAddress());
-				panel4.setTextArea(
-						"Il server è in attesa sulla porta " + port + " con indirizzo IP " + Server.getIpAddress());
-				choosed = true;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			panel4.setTextArea(serverSocket.toString());
-			tp1.setText(serverSocket.received);
+		     port++;
+		    }
+		   }
+		   this.port = port;
+	}
+	else if(arg0.getSource()==btnNewButton){
+	Client pc = new Client(ipAddr, port, tp1.getText());
+	}
 
-//				System.out.println("YAAAAHU");
-//			this.port = port;
-//			BufferedReader in;
-//			PrintStream out;
-//			try {
-//				System.out.println("YAAAAHU");
-//				client = new Client(serverSocket.getIpAddress(), port);
-//						
-//				client.socket = serverSocket.accept();
-//				System.out.println("YAAAAHU");
-//				in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-//				out = new PrintStream(client.getOutputStream(), true);
-//			} catch (Exception e1) {
-//				try {
-//					client.close();
-//				} catch (Exception e) {
-//					System.out.println(e.getMessage());
-//				}
-//				return;
-//			}
-//			System.out.println("YAAAAHU");
-////			panel4.setTextArea("Connessione accettata da client con IP " + client.getInetAddress());
-//			tp1.setText(Util.binaryToText(in.toString()));
-
-		} else if (arg0.getSource() == btnNewButton) {
-			String message = HammingDecoder.decode(tp1.getText());
-//			try {
-			System.out.println("tahu0");
-				client = new Client(ipAddr, port);
-				System.out.println("yahu1");
-//				BufferedReader in;
-//				PrintStream out;
-//				in = new BufferedReader(new InputStreamReader(client.socket.getInputStream()));
-				client.send(message);
-				System.out.println("yahu2");
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
-
-		else if (arg0.getSource() == about) {
-			JOptionPane.showMessageDialog(null, ABOUT_TEXT, "Guide", WIDTH);
-		} else if (arg0.getSource() == esci)
-			System.exit(0);
+	else if(arg0.getSource()==about){JOptionPane.showMessageDialog(null,ABOUT_TEXT,"Guide",WIDTH);}else if(arg0.getSource()==esci)System.exit(0);
 
 	}
 
@@ -317,5 +266,4 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 		});
 
 	}
-
 }

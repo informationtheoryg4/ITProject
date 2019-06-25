@@ -1,59 +1,36 @@
 package connection;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.net.Socket;
 
-public class Client {
+public class Client extends Thread {
 
-		BufferedReader in;
-		PrintStream out;
-public 	Socket socket;
+	private Socket client;
+	private String msg;
 
-	public Client(String ipAddress, int port) {
-
-		String message;
-
+	public Client(String address, int port, String msg) {
 		try {
-			System.out.println("yahuclient");
-			socket = new Socket("localhost", port);
-			System.out.println("yahuclient1");
-
+			this.msg=msg;
+			client = new Socket(address, port);
+			this.start();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
-	public void send(String message) {
+	public void run() {
 		try {
-			out = new PrintStream(socket.getOutputStream(), true);
-			out.println(message);
-			out.flush();
+			PrintStream out = new PrintStream(client.getOutputStream(), true);
+			out.println(msg);
 			out.close();
-			socket.close();
-
+			client.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
+	
+	public static void main (String[]args) {
+		Client c = new Client("localhost", 5001, "ajeje");
+	}
 
-	public String receive() {
-		String message = "";
-		try {
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			message = in.readLine();
-			in.close();
-			socket.close();
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return message;
-	}
-	public BufferedReader getInputStream() {
-		return in;
-	}
-	public PrintStream getOutputStream() {
-		return out;
-	}
 }
