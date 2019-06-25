@@ -73,6 +73,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private int port;
 //	private ServerSocket server;
 //	private Socket client;
+//b
 
 	public FinestraConMenu() {
 		setTitle("Coder Simulator");
