@@ -31,11 +31,16 @@ public class Server extends Thread{
 			Socket client = server.accept();
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(client.getInputStream()));
-			msg = in.readLine();
+			StringBuilder sb = new StringBuilder();
+			msg=in.readLine();
+			while(msg!=null) {
+				sb.append(msg+"\n");
+				msg = in.readLine();
+			}
 //			System.out.println(msg);
 			
 			//qui aggiornare GUI
-			tp1.setText(msg);
+			tp1.setText(sb.toString());
 			
 			in.close();
 			this.server.close();

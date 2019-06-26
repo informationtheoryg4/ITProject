@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -236,7 +237,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 		   while (!choosed) {
 		    try {
 		     Server ps = new Server(port, tp1);
-		     panel4.setTextArea("In attesa all'indirizzo "+ps.getIpAddress()+" sulla porta "+port);
+		     panel4.setTextArea("In attesa all'indirizzo "+InetAddress.getLocalHost().getHostAddress()+" sulla porta "+port);
 		     choosed = true;
 		    } catch (Exception e) {
 		     // TODO Auto-generated catch block
