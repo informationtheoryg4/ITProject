@@ -251,8 +251,8 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	Client pc = new Client(ipAddr, port, tp1.getText());
 	}
 
-	else if(arg0.getSource()==about){JOptionPane.showMessageDialog(null,ABOUT_TEXT,"Guide",WIDTH);}else if(arg0.getSource()==esci)System.exit(0);
-
+	else if(arg0.getSource()==about){
+		JOptionPane.showMessageDialog(null,ABOUT_TEXT,"Guide",WIDTH);}else if(arg0.getSource()==esci)System.exit(0);
 	}
 
 	public File getSelectedFile() {

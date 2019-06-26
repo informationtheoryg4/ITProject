@@ -47,7 +47,7 @@ public class Pier extends JPanel implements ActionListener{
 	boolean selected;
 	File selectedFile;
 	JComboBox comboBox_1;
-	JTextArea textArea = new JTextArea();
+	JTextArea txtr = new JTextArea();
 	
 	
 	public Pier() {
@@ -55,13 +55,13 @@ public class Pier extends JPanel implements ActionListener{
 		codingType = CodingType.HAMMING_7_4;
 		setForeground(SystemColor.desktop);
 		setBackground(SystemColor.menu);
-		textArea.setEnabled(false);
-		textArea.setLineWrap(true);
+		txtr.setLineWrap(true);
 		//textArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
-		textArea.setForeground(Color.BLACK);
-		textArea.setEditable(false);
+		txtr.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		txtr.setForeground(Color.BLACK);
+		txtr.setEditable(false);
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
-		textArea.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		txtr.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		selected=false;
 		
 		comboBox_1 = new JComboBox();
@@ -101,7 +101,7 @@ public class Pier extends JPanel implements ActionListener{
 					.addContainerGap(464, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(30)
-					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 445, GroupLayout.PREFERRED_SIZE)
+					.addComponent(txtr, GroupLayout.PREFERRED_SIZE, 445, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(66, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -116,7 +116,7 @@ public class Pier extends JPanel implements ActionListener{
 					.addGap(8)
 					.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 					.addGap(5)
-					.addComponent(textArea, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+					.addComponent(txtr, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
 					.addGap(122))
 		);
 		setLayout(groupLayout);
@@ -124,7 +124,7 @@ public class Pier extends JPanel implements ActionListener{
 	}
 	
 	public void setTextArea(String s) {
-		textArea.setText(s);
+		txtr.setText(s);
 	}
 	
 	@Override
