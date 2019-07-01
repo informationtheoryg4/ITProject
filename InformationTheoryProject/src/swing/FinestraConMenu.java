@@ -44,6 +44,7 @@ import connection.Client;
 import connection.Server;
 import hamming.HammingCoder;
 import hamming.HammingDecoder;
+import hamming.HammingType;
 import utils.Util;
 
 public class FinestraConMenu extends JFrame implements ActionListener {
@@ -72,11 +73,14 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private JButton btnNewButton;
 	private Socket client;
 	private int port;
+	private StringBuilder msgToSend;
+	private String binaryImage;
 //	private ServerSocket server;
 //	private Socket client;
 //b
 
 	public FinestraConMenu() {
+		msgToSend = new StringBuilder();
 		setTitle("Coder Simulator");
 		setLocation(150, 20);
 		setSize(1100, 630);
@@ -182,6 +186,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == imageS) {
+			msgToSend.append("1\n"); // primo bit messaggio: 0 per il testo, 1 per le immagini
 			FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()); // filtro
 																													// solo
 																													// immagini
@@ -208,12 +213,15 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 				});
 				String filePath = selectedFile.getAbsolutePath();
-				String binaryImage = Util.imageToBinary(filePath);
-
+				binaryImage = Util.byteArrayToBinary(Util.imageToByteArray(filePath));
+//				msgToSend.append(panel4.getCodingType().toString() + "\n");
+//				msgToSend.append(binaryImage);
+				btnNewButton.setEnabled(true);
 			}
 
 		} else if (arg0.getSource() == textS) {
 			setTitle("Coder Simulator - CLIENT");
+			msgToSend.append("0\n"); // primo bit messaggio: 0 per il testo, 1 per le immagini
 			tp1.setText("");
 			tp1.setEditable(true);
 			btnNewButton.setEnabled(true);
@@ -221,38 +229,80 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 			siw.setVisible(true);
 			siw.addWindowListener(new WindowAdapter() {
 
-	public void windowClosed(WindowEvent e) {
-		ipAddr = siw.getIP();
-		port = siw.getPort();
+				public void windowClosed(WindowEvent e) {
+					ipAddr = siw.getIP();
+					port = siw.getPort();
 
-	}
+				}
 
-	});
+			});
 
-	}else if(arg0.getSource()==textR){
-		setTitle("Coder Simulator - SERVER");
-		int port = 4000;
-		   tp1.setEditable(false);
-		   boolean choosed = false;
-		   while (!choosed) {
-		    try {
-		     Server ps = new Server(port, tp1);
-		     panel4.setTextArea("In attesa all'indirizzo "+InetAddress.getLocalHost().getHostAddress()+" sulla porta "+port);
-		     choosed = true;
-		    } catch (Exception e) {
-		     // TODO Auto-generated catch block
+		} else if (arg0.getSource() == textR || arg0.getSource() == imageR) {
+			setTitle("Coder Simulator - SERVER");
+			int port = 4000;
+			tp1.setEditable(false);
+			boolean choosed = false;
+			while (!choosed) {
+				try {
+					Server ps = new Server(port, tp1);
+					panel4.setTextArea("In attesa all'indirizzo " + InetAddress.getLocalHost().getHostAddress()
+							+ " sulla porta " + port);
+					choosed = true;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
 
-		     port++;
-		    }
-		   }
-		   this.port = port;
-	}
-	else if(arg0.getSource()==btnNewButton){
-	Client pc = new Client(ipAddr, port, tp1.getText());
-	}
+					port++;
+				}
+			} // CIAO
+			this.port = port;
+		} else if (arg0.getSource() == btnNewButton) {
+			if (msgToSend.toString().charAt(0) == '0') {
+				switch (panel4.getCodingType()) {
+				case HAMMING_7_4:
+					msgToSend.append(
+							"HAMMING_7_4\n" + HammingCoder.encode(binaryImage, HammingType.H_7_4));
+					break;
+				case HAMMING_12_8:
+					msgToSend.append("HAMMING_12_8\n"
+							+ HammingCoder.encode(binaryImage, HammingType.H_12_8));
+					break;
+				case HUFFMANN:
+					// TODO
+					break;
+				case LZ:
+					// TODO
+					break;
+				default:
+					break;
+				}
+			}else {
+				switch (panel4.getCodingType()) {
+				case HAMMING_7_4:
+					msgToSend.append(
+							"HAMMING_7_4\n" + HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_7_4));
+					break;
+				case HAMMING_12_8:
+					msgToSend.append("HAMMING_12_8\n"
+							+ HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_12_8));
+					break;
+				case HUFFMANN:
+					// TODO
+					break;
+				case LZ:
+					// TODO
+					break;
+				default:
+					break;
+				}
+			}
+			Client pc = new Client(ipAddr, port, msgToSend.toString());
+		}
 
-	else if(arg0.getSource()==about){
-		JOptionPane.showMessageDialog(null,ABOUT_TEXT,"Guide",WIDTH);}else if(arg0.getSource()==esci)System.exit(0);
+		else if (arg0.getSource() == about) {
+			JOptionPane.showMessageDialog(null, ABOUT_TEXT, "Guide", WIDTH);
+		} else if (arg0.getSource() == esci)
+			System.exit(0);
+
 	}
 
 	public File getSelectedFile() {

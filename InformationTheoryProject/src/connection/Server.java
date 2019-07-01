@@ -1,17 +1,24 @@
 package connection;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
 
+import hamming.HammingDecoder;
+import swing.CodingType;
 import utils.Util;
 
-public class Server extends Thread{
-	
+public class Server extends Thread {
+
 	private ServerSocket server;
 	private String msg;
 	private JTextPane tp1;
@@ -25,30 +32,76 @@ public class Server extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void run() {
 		try {
 			Socket client = server.accept();
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(client.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			StringBuilder sb = new StringBuilder();
-			msg=in.readLine();
-			while(msg!=null) {
-				sb.append(msg+"\n");
+			int txtOrImg = Integer.parseInt(in.readLine());
+			CodingType codingType = CodingType.valueOf(in.readLine());// CIAO
+			msg = in.readLine();
+			while (msg != null) {
+				sb.append(msg + "\n");
 				msg = in.readLine();
 			}
-//			System.out.println(msg);
-			
-			//qui aggiornare GUI
-			tp1.setText(sb.toString());
-			
+			if (txtOrImg == 0) { // TESTO
+				switch (codingType) {
+				case HAMMING_7_4:
+					tp1.setText(Util.binaryToText(HammingDecoder.decode(sb.toString())));
+					break;
+				case HAMMING_12_8:
+					tp1.setText(Util.binaryToText(HammingDecoder.decode(sb.toString())));
+					break;
+				case HUFFMANN:
+					// TODO
+					break;
+				case LZ:
+					// TODO
+					break;
+				}
+			} else { // IMMAGINE
+				BufferedImage bi = null;
+				File newFile = null;
+				switch (codingType) {
+				case HAMMING_7_4:
+					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));
+					newFile = new File("imgReceived.jpg");
+					try {
+						ImageIO.write(bi, "jpg", newFile);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					tp1.insertIcon(new ImageIcon(newFile.getAbsolutePath()));
+					break;
+				case HAMMING_12_8:
+					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));
+					newFile = new File("imgReceived.jpg");
+					try {
+						ImageIO.write(bi, "jpg", newFile);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					tp1.insertIcon(new ImageIcon(newFile.getAbsolutePath()));
+					break;
+				case HUFFMANN:
+					// TODO
+					break;
+				case LZ:
+					// TODO
+					break;
+				}
+			}
+
 			in.close();
 			this.server.close();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getIpAddress() {
 		URL myIP;
 		try {
@@ -77,9 +130,9 @@ public class Server extends Thread{
 		return null;
 	}
 
-	
-	public static void main(String[]args) {
-//		ProvaServer s = new ProvaServer(5001);
-		
+	public static void main(String[] args) {
+		CodingType ct = CodingType.HAMMING_7_4;
+		System.out.println(ct.toString() + CodingType.valueOf(ct.toString()));
+
 	}
 }

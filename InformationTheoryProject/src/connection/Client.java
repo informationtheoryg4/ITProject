@@ -15,7 +15,7 @@ public class Client extends Thread {
 			this.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} // CIAO
 	}
 
 	public void run() {
