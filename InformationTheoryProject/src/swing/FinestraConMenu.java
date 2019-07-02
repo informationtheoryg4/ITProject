@@ -260,11 +260,11 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 				switch (panel4.getCodingType()) {
 				case HAMMING_7_4:
 					msgToSend.append(
-							"HAMMING_7_4\n" + HammingCoder.encode(binaryImage, HammingType.H_7_4));
+							"HAMMING_7_4\n" + HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_7_4));
 					break;
 				case HAMMING_12_8:
 					msgToSend.append("HAMMING_12_8\n"
-							+ HammingCoder.encode(binaryImage, HammingType.H_12_8));
+							+ HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_12_8));
 					break;
 				case HUFFMANN:
 					// TODO
