@@ -45,19 +45,19 @@ public class Util {
             sb.append(Integer.toBinaryString(by & 0xFF));
           
         }
-        try {
-           
-            //create an print writer for writing to a file
-            PrintWriter out = new PrintWriter(new FileWriter("C:\\Users\\Giova\\Desktop\\output.txt"));
-            out.println(sb);
-            //close the file (VERY IMPORTANT!)
-            out.close();
-         }
-            catch(IOException e1) {
-              System.out.println("Error during reading/writing");
-         }
-      
-        byte [] b=sb.toString().getBytes();
+//        try {
+//           
+//            //create an print writer for writing to a file
+//            PrintWriter out = new PrintWriter(new FileWriter("C:\\Users\\Giova\\Desktop\\output.txt"));
+//            out.println(sb);
+//            //close the file (VERY IMPORTANT!)
+//            out.close();
+//         }
+//            catch(IOException e1) {
+//              System.out.println("Error during reading/writing");
+//         }
+//      
+//        byte [] b=sb.toString().getBytes();
         return sb.toString();
        
 	}

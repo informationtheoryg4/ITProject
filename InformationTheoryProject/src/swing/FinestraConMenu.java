@@ -256,7 +256,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 			} // CIAO
 			this.port = port;
 		} else if (arg0.getSource() == btnNewButton) {
-			if (msgToSend.toString().charAt(0) == '0') {
+			if (msgToSend.toString().charAt(0) == '0') { //TESTO
 				switch (panel4.getCodingType()) {
 				case HAMMING_7_4:
 					msgToSend.append(
@@ -275,15 +275,15 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 				default:
 					break;
 				}
-			}else {
+			}else { //IMMAGINE
 				switch (panel4.getCodingType()) {
 				case HAMMING_7_4:
 					msgToSend.append(
-							"HAMMING_7_4\n" + HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_7_4));
+							"HAMMING_7_4\n" + HammingCoder.encode(Util.imageToBinary(binaryImage), HammingType.H_7_4));
 					break;
 				case HAMMING_12_8:
 					msgToSend.append("HAMMING_12_8\n"
-							+ HammingCoder.encode(Util.textToBinary(tp1.getText()), HammingType.H_12_8));
+							+ HammingCoder.encode(Util.textToBinary(Util.imageToBinary(binaryImage)), HammingType.H_12_8));
 					break;
 				case HUFFMANN:
 					// TODO
