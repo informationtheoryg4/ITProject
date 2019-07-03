@@ -169,7 +169,7 @@ public class Util {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		byte [] b = new byte[] {27, 4};
+//		byte [] b = new byte[] {27, 4};  PORCO DIOOOOOO
 //		String binary = byteArrayToBinary(b);
 //		byte[] ba = binaryToByteArray(binary);
 //		System.out.println(binary);

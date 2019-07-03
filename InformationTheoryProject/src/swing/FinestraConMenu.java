@@ -186,7 +186,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == imageS) {
-			msgToSend.append("1\n"); // primo bit messaggio: 0 per il testo, 1 per le immagini
+			msgToSend.append("1\n"); // primo bit messaggio: 0 per il testo, 1 per le immagini CAZZO
 			FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()); // filtro
 																													// solo
 																													// immagini

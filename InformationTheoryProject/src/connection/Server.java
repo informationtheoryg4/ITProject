@@ -39,7 +39,7 @@ public class Server extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			StringBuilder sb = new StringBuilder();
 			int txtOrImg = Integer.parseInt(in.readLine());
-			CodingType codingType = CodingType.valueOf(in.readLine());// CIAO
+			CodingType codingType = CodingType.valueOf(in.readLine());// CIAO COSIMO
 			msg = in.readLine();
 			boolean b = false;
 			while (msg != null) {
