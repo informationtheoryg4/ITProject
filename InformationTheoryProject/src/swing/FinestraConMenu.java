@@ -213,7 +213,10 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 				});
 				String filePath = selectedFile.getAbsolutePath();
-				binaryImage = Util.byteArrayToBinary(Util.imageToByteArray(filePath));
+				byte [] bytes=Util.imageToByteArray(filePath);
+				binaryImage = Util.byteArrayToBinary(bytes);
+				System.out.println(binaryImage.length());
+//				binaryImage = Util.byteArrayToBinary(Util.imageToByteArray(filePath));
 //				msgToSend.append(panel4.getCodingType().toString() + "\n");
 //				msgToSend.append(binaryImage);
 				btnNewButton.setEnabled(true);
@@ -279,11 +282,11 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 				switch (panel4.getCodingType()) {
 				case HAMMING_7_4:
 					msgToSend.append(
-							"HAMMING_7_4\n" + HammingCoder.encode(Util.imageToBinary(binaryImage), HammingType.H_7_4));
+							"HAMMING_7_4\n" + HammingCoder.encode(binaryImage, HammingType.H_7_4));
 					break;
 				case HAMMING_12_8:
 					msgToSend.append("HAMMING_12_8\n"
-							+ HammingCoder.encode(Util.textToBinary(Util.imageToBinary(binaryImage)), HammingType.H_12_8));
+							+ HammingCoder.encode(Util.textToBinary(binaryImage), HammingType.H_12_8));
 					break;
 				case HUFFMANN:
 					// TODO

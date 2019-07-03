@@ -41,8 +41,13 @@ public class Server extends Thread {
 			int txtOrImg = Integer.parseInt(in.readLine());
 			CodingType codingType = CodingType.valueOf(in.readLine());// CIAO
 			msg = in.readLine();
+			boolean b = false;
 			while (msg != null) {
-				sb.append(msg + "\n");
+				if(b) {
+					sb.append("\n");
+					b=true;
+				}
+				sb.append(msg);
 				msg = in.readLine();
 			}
 			if (txtOrImg == 0) { // TESTO
@@ -61,19 +66,25 @@ public class Server extends Thread {
 					break;
 				}
 			} else { // IMMAGINE
-				BufferedImage bi = null;
 				File newFile = null;
 				switch (codingType) {
 				case HAMMING_7_4:
-					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));
-					newFile = new File("imgReceived.jpg");
+//					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));
+//					try {
+//						ImageIO.write(bi, "jpg", newFile);
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+					System.out.println(HammingDecoder.decode(sb.toString()).length());
+					BufferedImage bi= Util.byteArrayToImage(Util.binaryToByteArray(HammingDecoder.decode(sb.toString())));
 					try {
-						ImageIO.write(bi, "jpg", newFile);
+						ImageIO.write(bi, "jpg", new File("received.jpg") );
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					tp1.insertIcon(new ImageIcon(newFile.getAbsolutePath()));
+					tp1.insertIcon(new ImageIcon("received.jpg"));
 					break;
 				case HAMMING_12_8:
 					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));

@@ -158,9 +158,11 @@ public class Util {
 
 	public static void main(String[] args) {
 		byte [] bytes=imageToByteArray("luna.jpg");
+		String binary = byteArrayToBinary(bytes);
+		System.out.println(binary.length());
 		System.out.println("Array di bytes creato:\n");
 		System.out.println(bytes[3]);
-		BufferedImage bi= byteArrayToImage(bytes);
+		BufferedImage bi= byteArrayToImage(binaryToByteArray(binary));
 		try {
 			ImageIO.write(bi, "jpg", new File("output.jpg") );
 		} catch (IOException e) {
