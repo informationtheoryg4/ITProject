@@ -56,15 +56,15 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 	private static final String ABOUT_TEXT = "Project realized for Information Theory course at UNICAL (A.A.2018/19).\n"
 			+ "\nStudents:\nPierfrancesco D'Amico, 189243\n" + "Cosimo Loiero, 195328\n" + "Giovanni Aloia, 195325\n"
 			+ "\nProfessor:\nIng. De Rango Floriano\n";
-	private JMenu file, send, receive;
-	private JMenuItem esci, imageS, textS, imageR, textR, about;
+	private JMenu file, send;
+	private JMenuItem receive,esci, imageS, textS, about;
 	private JPanel panel1, panel2, panel3;
 	private JTextArea area2;
 	public JTextPane tp1;
 	private JFileChooser chooser;
 	private JButton start;
 	private File selectedFile;
-	private JScrollPane spa;
+	JScrollPane spa;
 	private Pier panel4;
 	private ServerInformationWindow siw;
 	private String ipAddr;
@@ -92,38 +92,30 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 		JMenu fileMenu = new JMenu("File");
 		// fileMenu.addSeparator();
 		send = new JMenu("Send");
-		receive = new JMenu("Receive");
+		receive = new JMenuItem("Receive");
 		receive.addActionListener(this);
 		textS = new JMenuItem("Message");
 		textS.addActionListener(this);
 		imageS = new JMenuItem("Image");
 		imageS.addActionListener(this);
-		textR = new JMenuItem("Message");
-		textR.addActionListener(this);
-		imageR = new JMenuItem("Image");
-		imageR.addActionListener(this);
 		send.add(imageS);
 		send.add(textS);
-		receive.add(imageR);
-		receive.add(textR);
 		fileMenu.add(send);
 		fileMenu.add(receive);
-
+		
 		esci = new JMenuItem("Esci");
 		esci.addActionListener(this);
 		fileMenu.addSeparator();
 		fileMenu.add(esci);
 		menuBar.add(fileMenu);
-		// JMenu command= new JMenu("Comandi");
-		// menuBar.add(command);
 		JMenu hlp = new JMenu("Help");
 		about = new JMenuItem("About");
 		about.addActionListener(this);
-
+		
 		hlp.add(about);
 		menuBar.add(hlp);
 		this.setJMenuBar(menuBar);
-
+		
 		JPanel space = new JPanel(new BorderLayout());
 		getContentPane().add(space, BorderLayout.CENTER);
 
@@ -137,14 +129,12 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 		spa.setAutoscrolls(true);
 		panel1.add(spa, "2, 2, left, top");
 		spa.setVisible(true);
-
 		btnNewButton = new JButton("START");
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(this);
 		panel1.add(btnNewButton);
 		panel1.setPreferredSize(new Dimension(570, 400));
-
 		space.add(panel1, BorderLayout.WEST);
 		start = new JButton("START");
 
@@ -186,6 +176,7 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == imageS) {
+			setTitle("Coder Simulator - CLIENT");
 			msgToSend.append("1\n"); // primo bit messaggio: 0 per il testo, 1 per le immagini CAZZO
 			FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()); // filtro
 																													// solo
@@ -240,14 +231,14 @@ public class FinestraConMenu extends JFrame implements ActionListener {
 
 			});
 
-		} else if (arg0.getSource() == textR || arg0.getSource() == imageR) {
+		} else if (arg0.getSource() == receive) {
 			setTitle("Coder Simulator - SERVER");
 			int port = 4000;
-			tp1.setEditable(false);
+			tp1.setEditable(true);
 			boolean choosed = false;
 			while (!choosed) {
 				try {
-					Server ps = new Server(port, tp1);
+					Server ps = new Server(port, tp1,spa);
 					panel4.setTextArea("In attesa all'indirizzo " + InetAddress.getLocalHost().getHostAddress()
 							+ " sulla porta " + port);
 					choosed = true;

@@ -1,5 +1,7 @@
 package connection;
 
+
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +13,10 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 
 import hamming.HammingDecoder;
 import swing.CodingType;
@@ -22,10 +27,12 @@ public class Server extends Thread {
 	private ServerSocket server;
 	private String msg;
 	private JTextPane tp1;
+	private JScrollPane spa;
 
-	public Server(int port, JTextPane tp1) {
+	public Server(int port, JTextPane tp1, JScrollPane spa) {
 		try {
 			this.tp1 = tp1;
+			this.spa = spa;
 			server = new ServerSocket(port);
 			this.start();
 		} catch (Exception e) {
@@ -84,7 +91,10 @@ public class Server extends Thread {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					tp1.insertIcon(new ImageIcon("received.jpg"));
+					
+					ImageIcon img = new ImageIcon("received.jpg");
+					tp1.insertIcon(img);
+					
 					break;
 				case HAMMING_12_8:
 					bi = Util.byteArrayToImage(Util.binaryToByteArray(sb.toString()));
